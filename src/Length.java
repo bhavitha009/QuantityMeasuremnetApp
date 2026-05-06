@@ -3,49 +3,23 @@ public class Length {
     private double value;
     private LengthUnit unit;
 
-    public enum LengthUnit {
-
-        FEET(12.0),
-        INCHES(1.0),
-        YARDS(36.0),
-        CENTIMETERS(0.393701);
-
-        private final double conversionFactor;
-
-        LengthUnit(double conversionFactor) {
-            this.conversionFactor = conversionFactor;
-        }
-
-        public double getConversionFactor() {
-            return conversionFactor;
-        }
-    }
-
-    public Length(double value, LengthUnit unit) {
+    public Length(double value,
+                  LengthUnit unit) {
 
         if (!Double.isFinite(value)) {
-            throw new IllegalArgumentException("Invalid value");
+            throw new IllegalArgumentException(
+                    "Invalid value"
+            );
         }
 
         if (unit == null) {
-            throw new IllegalArgumentException("Unit cannot be null");
+            throw new IllegalArgumentException(
+                    "Unit cannot be null"
+            );
         }
 
         this.value = value;
         this.unit = unit;
-    }
-
-    private double convertToBaseUnit() {
-
-        return value * unit.getConversionFactor();
-    }
-
-    private boolean compare(Length thatLength) {
-
-        return Double.compare(
-                this.convertToBaseUnit(),
-                thatLength.convertToBaseUnit()
-        ) == 0;
     }
 
     @Override
@@ -55,7 +29,9 @@ public class Length {
             return true;
         }
 
-        if (obj == null || getClass() != obj.getClass()) {
+        if (obj == null ||
+                getClass() != obj.getClass()) {
+
             return false;
         }
 
@@ -64,47 +40,70 @@ public class Length {
         return compare(thatLength);
     }
 
-    public Length convertTo(LengthUnit targetUnit) {
+    public Length convertTo(
+            LengthUnit targetUnit
+    ) {
 
-        if (targetUnit == null) {
-            throw new IllegalArgumentException("Target unit cannot be null");
-        }
-
-        double baseValue = convertToBaseUnit();
+        double baseValue =
+                convertToBaseUnit();
 
         double convertedValue =
-                baseValue / targetUnit.getConversionFactor();
+                convertFromBaseToTargetUnit(
+                        baseValue,
+                        targetUnit
+                );
 
-        return new Length(convertedValue, targetUnit);
-    }
-
-    // UC6 Add method
-    public Length add(Length thatLength) {
-
-        return add(thatLength, this.unit);
-    }
-
-    // UC7 Add with target unit
-    public Length add(Length thatLength,
-                      LengthUnit targetUnit) {
-
-        if (thatLength == null) {
-            throw new IllegalArgumentException("Length cannot be null");
-        }
-
-        if (targetUnit == null) {
-            throw new IllegalArgumentException("Target unit cannot be null");
-        }
-
-        return addAndConvert(
-                thatLength,
+        return new Length(
+                convertedValue,
                 targetUnit
         );
     }
 
-    // Private utility method
-    private Length addAndConvert(Length length,
-                                 LengthUnit targetUnit) {
+    public Length add(Length thatLength) {
+
+        return add(
+                thatLength,
+                this.unit
+        );
+    }
+
+    public Length add(
+            Length length,
+            LengthUnit targetUnit
+    ) {
+
+        if (length == null) {
+            throw new IllegalArgumentException(
+                    "Length cannot be null"
+            );
+        }
+
+        if (targetUnit == null) {
+            throw new IllegalArgumentException(
+                    "Target unit cannot be null"
+            );
+        }
+
+        return addAndConvert(
+                length,
+                targetUnit
+        );
+    }
+
+    private boolean compare(
+            Length thatLength
+    ) {
+
+        return Double.compare(
+                this.convertToBaseUnit(),
+                thatLength.convertToBaseUnit()
+        ) == 0;
+    }
+
+    private Length addAndConvert(
+            Length length,
+            LengthUnit targetUnit
+    ) {
 
         double thisBase =
                 this.convertToBaseUnit();
@@ -115,11 +114,35 @@ public class Length {
         double totalBase =
                 thisBase + otherBase;
 
-        double result =
-                totalBase /
-                        targetUnit.getConversionFactor();
+        double convertedValue =
+                convertFromBaseToTargetUnit(
+                        totalBase,
+                        targetUnit
+                );
 
-        return new Length(result, targetUnit);
+        return new Length(
+                convertedValue,
+                targetUnit
+        );
+    }
+
+    // Delegates conversion to enum
+    private double convertToBaseUnit() {
+
+        return unit.convertToBaseUnit(
+                value
+        );
+    }
+
+    // Delegates conversion to enum
+    private double convertFromBaseToTargetUnit(
+            double baseValue,
+            LengthUnit targetUnit
+    ) {
+
+        return targetUnit.convertFromBaseUnit(
+                baseValue
+        );
     }
 
     @Override

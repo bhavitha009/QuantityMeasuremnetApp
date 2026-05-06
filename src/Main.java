@@ -10,9 +10,9 @@ public class Main {
 
     public static boolean demonstrateLengthComparison(
             double value1,
-            Length.LengthUnit unit1,
+            LengthUnit unit1,
             double value2,
-            Length.LengthUnit unit2
+            LengthUnit unit2
     ) {
 
         Length length1 =
@@ -29,8 +29,8 @@ public class Main {
 
     public static Length demonstrateLengthConversion(
             double value,
-            Length.LengthUnit fromUnit,
-            Length.LengthUnit toUnit
+            LengthUnit fromUnit,
+            LengthUnit toUnit
     ) {
 
         Length length =
@@ -41,13 +41,12 @@ public class Main {
 
     public static Length demonstrateLengthConversion(
             Length length,
-            Length.LengthUnit toUnit
+            LengthUnit toUnit
     ) {
 
         return length.convertTo(toUnit);
     }
 
-    // UC6 Addition
     public static Length demonstrateLengthAddition(
             Length length1,
             Length length2
@@ -56,11 +55,10 @@ public class Main {
         return length1.add(length2);
     }
 
-    // UC7 Addition with target unit
     public static Length demonstrateLengthAddition(
             Length length1,
             Length length2,
-            Length.LengthUnit targetUnit
+            LengthUnit targetUnit
     ) {
 
         return length1.add(
@@ -72,43 +70,33 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println(
-                "===== UC7 Addition With Target Unit ====="
+                "===== UC8 Refactored Design ====="
         );
 
-        Length length1 =
-                new Length(
+        Length result =
+                demonstrateLengthAddition(
+                        new Length(
+                                1.0,
+                                LengthUnit.FEET
+                        ),
+
+                        new Length(
+                                12.0,
+                                LengthUnit.INCHES
+                        ),
+
+                        LengthUnit.FEET
+                );
+
+        System.out.println(result);
+
+        Length converted =
+                demonstrateLengthConversion(
                         1.0,
-                        Length.LengthUnit.FEET
+                        LengthUnit.FEET,
+                        LengthUnit.INCHES
                 );
 
-        Length length2 =
-                new Length(
-                        12.0,
-                        Length.LengthUnit.INCHES
-                );
-
-        System.out.println(
-                demonstrateLengthAddition(
-                        length1,
-                        length2,
-                        Length.LengthUnit.FEET
-                )
-        );
-
-        System.out.println(
-                demonstrateLengthAddition(
-                        length1,
-                        length2,
-                        Length.LengthUnit.INCHES
-                )
-        );
-
-        System.out.println(
-                demonstrateLengthAddition(
-                        length1,
-                        length2,
-                        Length.LengthUnit.YARDS
-                )
-        );
+        System.out.println(converted);
     }
 }
