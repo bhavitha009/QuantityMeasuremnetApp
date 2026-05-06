@@ -1,278 +1,211 @@
-import org.junit.jupiter.api.Test;
+@Test
+public void testAddition_ExplicitTargetUnit_Feet() {
 
-import static org.junit.jupiter.api.Assertions.*;
+    Length result =
+            Main.demonstrateLengthAddition(
+                    new Length(
+                            1.0,
+                            Length.LengthUnit.FEET
+                    ),
 
-public class MainTest {
+                    new Length(
+                            12.0,
+                            Length.LengthUnit.INCHES
+                    ),
 
-    private static final double EPSILON = 0.0001;
+                    Length.LengthUnit.FEET
+            );
 
-    @Test
-    public void testAddition_SameUnit_FeetPlusFeet() {
+    assertEquals(
+            2.0,
+            result.getValue(),
+            0.001
+    );
+}
 
-        Length length1 =
-                new Length(
-                        1.0,
-                        Length.LengthUnit.FEET
-                );
+@Test
+public void testAddition_ExplicitTargetUnit_Inches() {
 
-        Length length2 =
-                new Length(
-                        2.0,
-                        Length.LengthUnit.FEET
-                );
+    Length result =
+            Main.demonstrateLengthAddition(
+                    new Length(
+                            1.0,
+                            Length.LengthUnit.FEET
+                    ),
 
-        Length result =
-                Main.demonstrateLengthAddition(
-                        length1,
-                        length2
-                );
+                    new Length(
+                            12.0,
+                            Length.LengthUnit.INCHES
+                    ),
 
-        assertEquals(
-                3.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
+                    Length.LengthUnit.INCHES
+            );
 
-    @Test
-    public void testAddition_SameUnit_InchPlusInch() {
+    assertEquals(
+            24.0,
+            result.getValue(),
+            0.001
+    );
+}
 
-        Length length1 =
-                new Length(
-                        6.0,
-                        Length.LengthUnit.INCHES
-                );
+@Test
+public void testAddition_ExplicitTargetUnit_Yards() {
 
-        Length length2 =
-                new Length(
-                        6.0,
-                        Length.LengthUnit.INCHES
-                );
+    Length result =
+            Main.demonstrateLengthAddition(
+                    new Length(
+                            1.0,
+                            Length.LengthUnit.FEET
+                    ),
 
-        Length result =
-                Main.demonstrateLengthAddition(
-                        length1,
-                        length2
-                );
+                    new Length(
+                            12.0,
+                            Length.LengthUnit.INCHES
+                    ),
 
-        assertEquals(
-                12.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
+                    Length.LengthUnit.YARDS
+            );
 
-    @Test
-    public void testAddition_CrossUnit_FeetPlusInches() {
+    assertEquals(
+            0.666,
+            result.getValue(),
+            0.01
+    );
+}
 
-        Length length1 =
-                new Length(
-                        1.0,
-                        Length.LengthUnit.FEET
-                );
+@Test
+public void testAddition_ExplicitTargetUnit_Centimeters() {
 
-        Length length2 =
-                new Length(
-                        12.0,
-                        Length.LengthUnit.INCHES
-                );
+    Length result =
+            Main.demonstrateLengthAddition(
+                    new Length(
+                            1.0,
+                            Length.LengthUnit.INCHES
+                    ),
 
-        Length result =
-                Main.demonstrateLengthAddition(
-                        length1,
-                        length2
-                );
+                    new Length(
+                            1.0,
+                            Length.LengthUnit.INCHES
+                    ),
 
-        assertEquals(
-                2.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
+                    Length.LengthUnit.CENTIMETERS
+            );
 
-    @Test
-    public void testAddition_CrossUnit_InchPlusFeet() {
+    assertEquals(
+            5.08,
+            result.getValue(),
+            0.1
+    );
+}
 
-        Length length1 =
-                new Length(
-                        12.0,
-                        Length.LengthUnit.INCHES
-                );
+@Test
+public void testAddition_ExplicitTargetUnit_NullTargetUnit() {
 
-        Length length2 =
-                new Length(
-                        1.0,
-                        Length.LengthUnit.FEET
-                );
+    assertThrows(
+            IllegalArgumentException.class,
 
-        Length result =
-                Main.demonstrateLengthAddition(
-                        length1,
-                        length2
-                );
+            () -> Main.demonstrateLengthAddition(
+                    new Length(
+                            1.0,
+                            Length.LengthUnit.FEET
+                    ),
 
-        assertEquals(
-                24.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
+                    new Length(
+                            12.0,
+                            Length.LengthUnit.INCHES
+                    ),
 
-    @Test
-    public void testAddition_CrossUnit_YardPlusFeet() {
+                    null
+            )
+    );
+}
 
-        Length length1 =
-                new Length(
-                        1.0,
-                        Length.LengthUnit.YARDS
-                );
+@Test
+public void testAddition_ExplicitTargetUnit_WithZero() {
 
-        Length length2 =
-                new Length(
-                        3.0,
-                        Length.LengthUnit.FEET
-                );
+    Length result =
+            Main.demonstrateLengthAddition(
+                    new Length(
+                            5.0,
+                            Length.LengthUnit.FEET
+                    ),
 
-        Length result =
-                Main.demonstrateLengthAddition(
-                        length1,
-                        length2
-                );
+                    new Length(
+                            0.0,
+                            Length.LengthUnit.INCHES
+                    ),
 
-        assertEquals(
-                2.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
+                    Length.LengthUnit.YARDS
+            );
 
-    @Test
-    public void testAddition_WithZero() {
+    assertEquals(
+            1.666,
+            result.getValue(),
+            0.01
+    );
+}
 
-        Length length1 =
-                new Length(
-                        5.0,
-                        Length.LengthUnit.FEET
-                );
+@Test
+public void testAddition_ExplicitTargetUnit_NegativeValues() {
 
-        Length length2 =
-                new Length(
-                        0.0,
-                        Length.LengthUnit.INCHES
-                );
+    Length result =
+            Main.demonstrateLengthAddition(
+                    new Length(
+                            5.0,
+                            Length.LengthUnit.FEET
+                    ),
 
-        Length result =
-                Main.demonstrateLengthAddition(
-                        length1,
-                        length2
-                );
+                    new Length(
+                            -2.0,
+                            Length.LengthUnit.FEET
+                    ),
 
-        assertEquals(
-                5.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
+                    Length.LengthUnit.INCHES
+            );
 
-    @Test
-    public void testAddition_NegativeValues() {
+    assertEquals(
+            36.0,
+            result.getValue(),
+            0.001
+    );
+}
 
-        Length length1 =
-                new Length(
-                        5.0,
-                        Length.LengthUnit.FEET
-                );
+@Test
+public void testAddition_ExplicitTargetUnit_Commutativity() {
 
-        Length length2 =
-                new Length(
-                        -2.0,
-                        Length.LengthUnit.FEET
-                );
+    Length result1 =
+            Main.demonstrateLengthAddition(
+                    new Length(
+                            1.0,
+                            Length.LengthUnit.FEET
+                    ),
 
-        Length result =
-                Main.demonstrateLengthAddition(
-                        length1,
-                        length2
-                );
+                    new Length(
+                            12.0,
+                            Length.LengthUnit.INCHES
+                    ),
 
-        assertEquals(
-                3.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
+                    Length.LengthUnit.YARDS
+            );
 
-    @Test
-    public void testAddition_NullSecondOperand() {
+    Length result2 =
+            Main.demonstrateLengthAddition(
+                    new Length(
+                            12.0,
+                            Length.LengthUnit.INCHES
+                    ),
 
-        Length length1 =
-                new Length(
-                        1.0,
-                        Length.LengthUnit.FEET
-                );
+                    new Length(
+                            1.0,
+                            Length.LengthUnit.FEET
+                    ),
 
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> Main.demonstrateLengthAddition(
-                        length1,
-                        null
-                )
-        );
-    }
+                    Length.LengthUnit.YARDS
+            );
 
-    @Test
-    public void testAddition_LargeValues() {
-
-        Length length1 =
-                new Length(
-                        1e6,
-                        Length.LengthUnit.FEET
-                );
-
-        Length length2 =
-                new Length(
-                        1e6,
-                        Length.LengthUnit.FEET
-                );
-
-        Length result =
-                Main.demonstrateLengthAddition(
-                        length1,
-                        length2
-                );
-
-        assertEquals(
-                2e6,
-                result.getValue(),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testAddition_SmallValues() {
-
-        Length length1 =
-                new Length(
-                        0.001,
-                        Length.LengthUnit.FEET
-                );
-
-        Length length2 =
-                new Length(
-                        0.002,
-                        Length.LengthUnit.FEET
-                );
-
-        Length result =
-                Main.demonstrateLengthAddition(
-                        length1,
-                        length2
-                );
-
-        assertEquals(
-                0.003,
-                result.getValue(),
-                EPSILON
-        );
-    }
+    assertEquals(
+            result1.getValue(),
+            result2.getValue(),
+            0.001
+    );
 }

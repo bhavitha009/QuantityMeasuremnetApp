@@ -1,10 +1,8 @@
 public class Length {
 
-    // Instance variables
     private double value;
     private LengthUnit unit;
 
-    // Enum for units
     public enum LengthUnit {
 
         FEET(12.0),
@@ -23,11 +21,10 @@ public class Length {
         }
     }
 
-    // Constructor
     public Length(double value, LengthUnit unit) {
 
         if (!Double.isFinite(value)) {
-            throw new IllegalArgumentException("Invalid numeric value");
+            throw new IllegalArgumentException("Invalid value");
         }
 
         if (unit == null) {
@@ -38,12 +35,11 @@ public class Length {
         this.unit = unit;
     }
 
-    // Convert to base unit
     private double convertToBaseUnit() {
+
         return value * unit.getConversionFactor();
     }
 
-    // Compare method
     private boolean compare(Length thatLength) {
 
         return Double.compare(
@@ -52,7 +48,6 @@ public class Length {
         ) == 0;
     }
 
-    // Equals method
     @Override
     public boolean equals(Object obj) {
 
@@ -69,7 +64,6 @@ public class Length {
         return compare(thatLength);
     }
 
-    // Convert to another unit
     public Length convertTo(LengthUnit targetUnit) {
 
         if (targetUnit == null) {
@@ -84,29 +78,50 @@ public class Length {
         return new Length(convertedValue, targetUnit);
     }
 
-    // Add method
+    // UC6 Add method
     public Length add(Length thatLength) {
+
+        return add(thatLength, this.unit);
+    }
+
+    // UC7 Add with target unit
+    public Length add(Length thatLength,
+                      LengthUnit targetUnit) {
 
         if (thatLength == null) {
             throw new IllegalArgumentException("Length cannot be null");
         }
 
+        if (targetUnit == null) {
+            throw new IllegalArgumentException("Target unit cannot be null");
+        }
+
+        return addAndConvert(
+                thatLength,
+                targetUnit
+        );
+    }
+
+    // Private utility method
+    private Length addAndConvert(Length length,
+                                 LengthUnit targetUnit) {
+
         double thisBase =
                 this.convertToBaseUnit();
 
-        double thatBase =
-                thatLength.convertToBaseUnit();
+        double otherBase =
+                length.convertToBaseUnit();
 
         double totalBase =
-                thisBase + thatBase;
+                thisBase + otherBase;
 
-        double resultValue =
-                totalBase / this.unit.getConversionFactor();
+        double result =
+                totalBase /
+                        targetUnit.getConversionFactor();
 
-        return new Length(resultValue, this.unit);
+        return new Length(result, targetUnit);
     }
 
-    // toString
     @Override
     public String toString() {
 
@@ -117,7 +132,6 @@ public class Length {
         );
     }
 
-    // Getters
     public double getValue() {
         return value;
     }
