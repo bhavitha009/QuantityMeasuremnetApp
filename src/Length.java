@@ -38,7 +38,7 @@ public class Length {
         this.unit = unit;
     }
 
-    // Convert to base unit (inches)
+    // Convert to base unit
     private double convertToBaseUnit() {
         return value * unit.getConversionFactor();
     }
@@ -52,7 +52,7 @@ public class Length {
         ) == 0;
     }
 
-    // Override equals
+    // Equals method
     @Override
     public boolean equals(Object obj) {
 
@@ -84,7 +84,29 @@ public class Length {
         return new Length(convertedValue, targetUnit);
     }
 
-    // toString method
+    // Add method
+    public Length add(Length thatLength) {
+
+        if (thatLength == null) {
+            throw new IllegalArgumentException("Length cannot be null");
+        }
+
+        double thisBase =
+                this.convertToBaseUnit();
+
+        double thatBase =
+                thatLength.convertToBaseUnit();
+
+        double totalBase =
+                thisBase + thatBase;
+
+        double resultValue =
+                totalBase / this.unit.getConversionFactor();
+
+        return new Length(resultValue, this.unit);
+    }
+
+    // toString
     @Override
     public String toString() {
 
@@ -95,7 +117,7 @@ public class Length {
         );
     }
 
-    // Getter methods
+    // Getters
     public double getValue() {
         return value;
     }

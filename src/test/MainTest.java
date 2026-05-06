@@ -7,13 +7,52 @@ public class MainTest {
     private static final double EPSILON = 0.0001;
 
     @Test
-    public void testConversion_FeetToInches() {
+    public void testAddition_SameUnit_FeetPlusFeet() {
+
+        Length length1 =
+                new Length(
+                        1.0,
+                        Length.LengthUnit.FEET
+                );
+
+        Length length2 =
+                new Length(
+                        2.0,
+                        Length.LengthUnit.FEET
+                );
 
         Length result =
-                Main.demonstrateLengthConversion(
-                        1.0,
-                        Length.LengthUnit.FEET,
+                Main.demonstrateLengthAddition(
+                        length1,
+                        length2
+                );
+
+        assertEquals(
+                3.0,
+                result.getValue(),
+                EPSILON
+        );
+    }
+
+    @Test
+    public void testAddition_SameUnit_InchPlusInch() {
+
+        Length length1 =
+                new Length(
+                        6.0,
                         Length.LengthUnit.INCHES
+                );
+
+        Length length2 =
+                new Length(
+                        6.0,
+                        Length.LengthUnit.INCHES
+                );
+
+        Length result =
+                Main.demonstrateLengthAddition(
+                        length1,
+                        length2
                 );
 
         assertEquals(
@@ -24,183 +63,214 @@ public class MainTest {
     }
 
     @Test
-    public void testConversion_InchesToFeet() {
+    public void testAddition_CrossUnit_FeetPlusInches() {
 
-        Length result =
-                Main.demonstrateLengthConversion(
-                        24.0,
-                        Length.LengthUnit.INCHES,
-                        Length.LengthUnit.FEET
-                );
-
-        assertEquals(
-                2.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testConversion_YardsToInches() {
-
-        Length result =
-                Main.demonstrateLengthConversion(
+        Length length1 =
+                new Length(
                         1.0,
-                        Length.LengthUnit.YARDS,
-                        Length.LengthUnit.INCHES
-                );
-
-        assertEquals(
-                36.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testConversion_InchesToYards() {
-
-        Length result =
-                Main.demonstrateLengthConversion(
-                        72.0,
-                        Length.LengthUnit.INCHES,
-                        Length.LengthUnit.YARDS
-                );
-
-        assertEquals(
-                2.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testConversion_CentimetersToInches() {
-
-        Length result =
-                Main.demonstrateLengthConversion(
-                        2.54,
-                        Length.LengthUnit.CENTIMETERS,
-                        Length.LengthUnit.INCHES
-                );
-
-        assertEquals(
-                1.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testConversion_FeetToYards() {
-
-        Length result =
-                Main.demonstrateLengthConversion(
-                        6.0,
-                        Length.LengthUnit.FEET,
-                        Length.LengthUnit.YARDS
-                );
-
-        assertEquals(
-                2.0,
-                result.getValue(),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testConversion_RoundTrip_PreservesValue() {
-
-        Length converted =
-                Main.demonstrateLengthConversion(
-                        5.0,
-                        Length.LengthUnit.FEET,
-                        Length.LengthUnit.INCHES
-                );
-
-        Length roundTrip =
-                Main.demonstrateLengthConversion(
-                        converted,
                         Length.LengthUnit.FEET
+                );
+
+        Length length2 =
+                new Length(
+                        12.0,
+                        Length.LengthUnit.INCHES
+                );
+
+        Length result =
+                Main.demonstrateLengthAddition(
+                        length1,
+                        length2
+                );
+
+        assertEquals(
+                2.0,
+                result.getValue(),
+                EPSILON
+        );
+    }
+
+    @Test
+    public void testAddition_CrossUnit_InchPlusFeet() {
+
+        Length length1 =
+                new Length(
+                        12.0,
+                        Length.LengthUnit.INCHES
+                );
+
+        Length length2 =
+                new Length(
+                        1.0,
+                        Length.LengthUnit.FEET
+                );
+
+        Length result =
+                Main.demonstrateLengthAddition(
+                        length1,
+                        length2
+                );
+
+        assertEquals(
+                24.0,
+                result.getValue(),
+                EPSILON
+        );
+    }
+
+    @Test
+    public void testAddition_CrossUnit_YardPlusFeet() {
+
+        Length length1 =
+                new Length(
+                        1.0,
+                        Length.LengthUnit.YARDS
+                );
+
+        Length length2 =
+                new Length(
+                        3.0,
+                        Length.LengthUnit.FEET
+                );
+
+        Length result =
+                Main.demonstrateLengthAddition(
+                        length1,
+                        length2
+                );
+
+        assertEquals(
+                2.0,
+                result.getValue(),
+                EPSILON
+        );
+    }
+
+    @Test
+    public void testAddition_WithZero() {
+
+        Length length1 =
+                new Length(
+                        5.0,
+                        Length.LengthUnit.FEET
+                );
+
+        Length length2 =
+                new Length(
+                        0.0,
+                        Length.LengthUnit.INCHES
+                );
+
+        Length result =
+                Main.demonstrateLengthAddition(
+                        length1,
+                        length2
                 );
 
         assertEquals(
                 5.0,
-                roundTrip.getValue(),
-                EPSILON
-        );
-    }
-
-    @Test
-    public void testConversion_ZeroValue() {
-
-        Length result =
-                Main.demonstrateLengthConversion(
-                        0.0,
-                        Length.LengthUnit.FEET,
-                        Length.LengthUnit.INCHES
-                );
-
-        assertEquals(
-                0.0,
                 result.getValue(),
                 EPSILON
         );
     }
 
     @Test
-    public void testConversion_NegativeValue() {
+    public void testAddition_NegativeValues() {
+
+        Length length1 =
+                new Length(
+                        5.0,
+                        Length.LengthUnit.FEET
+                );
+
+        Length length2 =
+                new Length(
+                        -2.0,
+                        Length.LengthUnit.FEET
+                );
 
         Length result =
-                Main.demonstrateLengthConversion(
-                        -1.0,
-                        Length.LengthUnit.FEET,
-                        Length.LengthUnit.INCHES
+                Main.demonstrateLengthAddition(
+                        length1,
+                        length2
                 );
 
         assertEquals(
-                -12.0,
+                3.0,
                 result.getValue(),
                 EPSILON
         );
     }
 
     @Test
-    public void testConversion_InvalidUnit_Throws() {
+    public void testAddition_NullSecondOperand() {
+
+        Length length1 =
+                new Length(
+                        1.0,
+                        Length.LengthUnit.FEET
+                );
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new Length(
-                        1.0,
+                () -> Main.demonstrateLengthAddition(
+                        length1,
                         null
                 )
         );
     }
 
     @Test
-    public void testConversion_NaNOrInfinite_Throws() {
+    public void testAddition_LargeValues() {
 
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new Length(
-                        Double.NaN,
+        Length length1 =
+                new Length(
+                        1e6,
                         Length.LengthUnit.FEET
-                )
+                );
+
+        Length length2 =
+                new Length(
+                        1e6,
+                        Length.LengthUnit.FEET
+                );
+
+        Length result =
+                Main.demonstrateLengthAddition(
+                        length1,
+                        length2
+                );
+
+        assertEquals(
+                2e6,
+                result.getValue(),
+                EPSILON
         );
     }
 
     @Test
-    public void testConversion_PrecisionTolerance() {
+    public void testAddition_SmallValues() {
+
+        Length length1 =
+                new Length(
+                        0.001,
+                        Length.LengthUnit.FEET
+                );
+
+        Length length2 =
+                new Length(
+                        0.002,
+                        Length.LengthUnit.FEET
+                );
 
         Length result =
-                Main.demonstrateLengthConversion(
-                        1.0,
-                        Length.LengthUnit.CENTIMETERS,
-                        Length.LengthUnit.INCHES
+                Main.demonstrateLengthAddition(
+                        length1,
+                        length2
                 );
 
         assertEquals(
-                0.393701,
+                0.003,
                 result.getValue(),
                 EPSILON
         );
