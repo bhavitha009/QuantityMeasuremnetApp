@@ -4,241 +4,205 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class MainTest {
 
+    private static final double EPSILON = 0.0001;
+
     @Test
-    public void testFeetEquality() {
+    public void testConversion_FeetToInches() {
 
-        Main.Length feet1 =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.FEET);
+        Length result =
+                Main.demonstrateLengthConversion(
+                        1.0,
+                        Length.LengthUnit.FEET,
+                        Length.LengthUnit.INCHES
+                );
 
-        Main.Length feet2 =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.FEET);
-
-        assertTrue(feet1.equals(feet2));
+        assertEquals(
+                12.0,
+                result.getValue(),
+                EPSILON
+        );
     }
 
     @Test
-    public void testInchesEquality() {
+    public void testConversion_InchesToFeet() {
 
-        Main.Length inches1 =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.INCHES);
+        Length result =
+                Main.demonstrateLengthConversion(
+                        24.0,
+                        Length.LengthUnit.INCHES,
+                        Length.LengthUnit.FEET
+                );
 
-        Main.Length inches2 =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.INCHES);
-
-        assertTrue(inches1.equals(inches2));
+        assertEquals(
+                2.0,
+                result.getValue(),
+                EPSILON
+        );
     }
 
     @Test
-    public void testFeetInchesComparison() {
+    public void testConversion_YardsToInches() {
 
-        Main.Length feet =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.FEET);
+        Length result =
+                Main.demonstrateLengthConversion(
+                        1.0,
+                        Length.LengthUnit.YARDS,
+                        Length.LengthUnit.INCHES
+                );
 
-        Main.Length inches =
-                new Main.Length(12.0,
-                        Main.Length.LengthUnit.INCHES);
-
-        assertTrue(feet.equals(inches));
+        assertEquals(
+                36.0,
+                result.getValue(),
+                EPSILON
+        );
     }
 
     @Test
-    public void testFeetInequality() {
+    public void testConversion_InchesToYards() {
 
-        Main.Length feet1 =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.FEET);
+        Length result =
+                Main.demonstrateLengthConversion(
+                        72.0,
+                        Length.LengthUnit.INCHES,
+                        Length.LengthUnit.YARDS
+                );
 
-        Main.Length feet2 =
-                new Main.Length(2.0,
-                        Main.Length.LengthUnit.FEET);
-
-        assertFalse(feet1.equals(feet2));
+        assertEquals(
+                2.0,
+                result.getValue(),
+                EPSILON
+        );
     }
 
     @Test
-    public void testInchesInequality() {
+    public void testConversion_CentimetersToInches() {
 
-        Main.Length inches1 =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.INCHES);
+        Length result =
+                Main.demonstrateLengthConversion(
+                        2.54,
+                        Length.LengthUnit.CENTIMETERS,
+                        Length.LengthUnit.INCHES
+                );
 
-        Main.Length inches2 =
-                new Main.Length(2.0,
-                        Main.Length.LengthUnit.INCHES);
-
-        assertFalse(inches1.equals(inches2));
+        assertEquals(
+                1.0,
+                result.getValue(),
+                EPSILON
+        );
     }
 
     @Test
-    public void testCrossUnitInequality() {
+    public void testConversion_FeetToYards() {
 
-        Main.Length feet =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.FEET);
+        Length result =
+                Main.demonstrateLengthConversion(
+                        6.0,
+                        Length.LengthUnit.FEET,
+                        Length.LengthUnit.YARDS
+                );
 
-        Main.Length inches =
-                new Main.Length(10.0,
-                        Main.Length.LengthUnit.INCHES);
-
-        assertFalse(feet.equals(inches));
+        assertEquals(
+                2.0,
+                result.getValue(),
+                EPSILON
+        );
     }
 
     @Test
-    public void testMultipleFeetComparison() {
+    public void testConversion_RoundTrip_PreservesValue() {
 
-        Main.Length feet =
-                new Main.Length(2.0,
-                        Main.Length.LengthUnit.FEET);
+        Length converted =
+                Main.demonstrateLengthConversion(
+                        5.0,
+                        Length.LengthUnit.FEET,
+                        Length.LengthUnit.INCHES
+                );
 
-        Main.Length inches =
-                new Main.Length(24.0,
-                        Main.Length.LengthUnit.INCHES);
+        Length roundTrip =
+                Main.demonstrateLengthConversion(
+                        converted,
+                        Length.LengthUnit.FEET
+                );
 
-        assertTrue(feet.equals(inches));
+        assertEquals(
+                5.0,
+                roundTrip.getValue(),
+                EPSILON
+        );
     }
 
     @Test
-    public void yardEquals36Inches() {
+    public void testConversion_ZeroValue() {
 
-        Main.Length yard =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.YARDS);
+        Length result =
+                Main.demonstrateLengthConversion(
+                        0.0,
+                        Length.LengthUnit.FEET,
+                        Length.LengthUnit.INCHES
+                );
 
-        Main.Length inches =
-                new Main.Length(36.0,
-                        Main.Length.LengthUnit.INCHES);
-
-        assertTrue(yard.equals(inches));
+        assertEquals(
+                0.0,
+                result.getValue(),
+                EPSILON
+        );
     }
 
     @Test
-    public void centimeterEqualsPoint393701Inches() {
+    public void testConversion_NegativeValue() {
 
-        Main.Length centimeters =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.CENTIMETERS);
+        Length result =
+                Main.demonstrateLengthConversion(
+                        -1.0,
+                        Length.LengthUnit.FEET,
+                        Length.LengthUnit.INCHES
+                );
 
-        Main.Length inches =
-                new Main.Length(0.393701,
-                        Main.Length.LengthUnit.INCHES);
-
-        assertTrue(centimeters.equals(inches));
+        assertEquals(
+                -12.0,
+                result.getValue(),
+                EPSILON
+        );
     }
 
     @Test
-    public void threeFeetEqualsOneYard() {
+    public void testConversion_InvalidUnit_Throws() {
 
-        Main.Length feet =
-                new Main.Length(3.0,
-                        Main.Length.LengthUnit.FEET);
-
-        Main.Length yard =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.YARDS);
-
-        assertTrue(feet.equals(yard));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Length(
+                        1.0,
+                        null
+                )
+        );
     }
 
     @Test
-    public void thirtyPoint48CmEqualsOneFoot() {
+    public void testConversion_NaNOrInfinite_Throws() {
 
-        Main.Length centimeters =
-                new Main.Length(30.48,
-                        Main.Length.LengthUnit.CENTIMETERS);
-
-        Main.Length feet =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.FEET);
-
-        assertTrue(centimeters.equals(feet));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Length(
+                        Double.NaN,
+                        Length.LengthUnit.FEET
+                )
+        );
     }
 
     @Test
-    public void yardNotEqualTo11Inches() {
+    public void testConversion_PrecisionTolerance() {
 
-        Main.Length yard =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.YARDS);
+        Length result =
+                Main.demonstrateLengthConversion(
+                        1.0,
+                        Length.LengthUnit.CENTIMETERS,
+                        Length.LengthUnit.INCHES
+                );
 
-        Main.Length inches =
-                new Main.Length(11.0,
-                        Main.Length.LengthUnit.INCHES);
-
-        assertFalse(yard.equals(inches));
-    }
-
-    @Test
-    public void referenceEqualitySameObject() {
-
-        Main.Length feet =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.FEET);
-
-        assertTrue(feet.equals(feet));
-    }
-
-    @Test
-    public void equalsReturnsFalseForNull() {
-
-        Main.Length feet =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.FEET);
-
-        assertFalse(feet.equals(null));
-    }
-
-    @Test
-    public void reflexiveSymmetricAndTransitiveProperty() {
-
-        Main.Length yard =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.YARDS);
-
-        Main.Length feet =
-                new Main.Length(3.0,
-                        Main.Length.LengthUnit.FEET);
-
-        Main.Length inches =
-                new Main.Length(36.0,
-                        Main.Length.LengthUnit.INCHES);
-
-        assertTrue(yard.equals(feet));
-        assertTrue(feet.equals(inches));
-        assertTrue(yard.equals(inches));
-    }
-
-    @Test
-    public void differentValuesSameUnitNotEqual() {
-
-        Main.Length yard1 =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.YARDS);
-
-        Main.Length yard2 =
-                new Main.Length(2.0,
-                        Main.Length.LengthUnit.YARDS);
-
-        assertFalse(yard1.equals(yard2));
-    }
-
-    @Test
-    public void crossUnitEqualityDemonstrateMethod() {
-
-        Main.Length feet =
-                new Main.Length(1.0,
-                        Main.Length.LengthUnit.FEET);
-
-        Main.Length inches =
-                new Main.Length(12.0,
-                        Main.Length.LengthUnit.INCHES);
-
-        assertTrue(
-                Main.demonstrateLengthEquality(feet, inches)
+        assertEquals(
+                0.393701,
+                result.getValue(),
+                EPSILON
         );
     }
 }
